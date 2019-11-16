@@ -111,7 +111,7 @@ namespace ThermalCamera
                 var ctrreg = ReadRegisterData(0x800D, 1).FirstOrDefault();
 
                 // リフレッシュレートを変更する(現在のコントロールレジスタを読み出して、そいつに対して変更を実施)
-                var ctrregset = (ushort)(ctrreg | 0x0300);
+                var ctrregset = (ushort)(ctrreg | 0x0380);
                 WriteRegisterData(0x800D, ctrregset);
             }
             catch (Exception ex)

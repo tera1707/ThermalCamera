@@ -11,7 +11,13 @@
     
     <Grid>
         <!-- サーマル画像 -->
-        <Viewbox>
+        <Viewbox RenderTransformOrigin="0.5,0.5">
+            <Viewbox.RenderTransform>
+                <TransformGroup>
+                    <RotateTransform Angle="180"/>
+                    <ScaleTransform ScaleX="-1"/>
+                </TransformGroup>
+            </Viewbox.RenderTransform>
             <Grid Name="ImageMainGrid" Width="32" Height="24">
                 <Image Name="imageMain" Width="{Binding ActualWidth, ElementName=ImageMainGrid}" Height="{Binding ActualHeight, ElementName=ImageMainGrid}"/>
                 <Rectangle Width="3" Height="3" Stroke="#cc800080" StrokeThickness="0.5"/>
