@@ -15,4 +15,8 @@
     <RemoteDebugMachine>minwinpc</RemoteDebugMachine>
     <UseAuthentication>false</UseAuthentication>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <RemoteDebugMachine>DESKTOP-A3HDOQK</RemoteDebugMachine>
+    <RemoteDebugEnabled>true</RemoteDebugEnabled>
+  </PropertyGroup>
 </Project>

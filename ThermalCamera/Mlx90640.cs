@@ -39,14 +39,12 @@ namespace ThermalCamera
         // ページ1と2を合わせたフレームのデータ
         private double[] TotalFrameData = new double[FrameDataLength];
 
-        // 円周率
-        private double M_PI = 3.1415;
 
         // サーマル画像 上限温度(これより温度が高いと「赤」になる)
-        public double UpperLimit = 40;
+        public double UpperLimit = 33;
 
         // サーマル画像 下限温度(これより温度が低いと「青」になる)
-        public double LowerLimit = 15;
+        public double LowerLimit = 20;
 
         public void Dispose()
         {
@@ -186,10 +184,10 @@ namespace ThermalCamera
         /// ※直前にGetTemperatureData()を実行している必要あり
         /// </summary>
         /// <returns></returns>
-        public async Task<BitmapImage> GetWriteableBitmap()
-        {
-            return await DoubleToRaindowColor(TotalFrameData);
-        }
+        //public async Task<BitmapImage> GetWriteableBitmap()
+        //{
+        //    return await DoubleToRaindowColor(TotalFrameData);
+        //}
 
         #endregion
 
@@ -1068,101 +1066,6 @@ namespace ThermalCamera
 
         #region 画像作成関連
 
-        private (byte, byte, byte, byte) ColorScaleBCGYR(double in_value)
-        {
-            // 0.0～1.0 の範囲の値をサーモグラフィみたいな色にする
-            // 0.0                    1.0
-            // 青    水    緑    黄    赤
-            // 最小値以下 = 青
-            // 最大値以上 = 赤
-            int ret;
-            int a = 255;    // alpha値
-            int r, g, b;    // RGB値
-            double value = in_value;
-            double tmp_val = Math.Cos(4 * M_PI * value);
-            int col_val = (int)((-tmp_val / 2 + 0.5) * 255);
-            if (value >= (4.0 / 4.0)) { r = 255; g = 0; b = 0; }   // 赤
-            else if (value >= (3.0 / 4.0)) { r = 255; g = col_val; b = 0; }   // 黄～赤
-            else if (value >= (2.0 / 4.0)) { r = col_val; g = 255; b = 0; }   // 緑～黄
-            else if (value >= (1.0 / 4.0)) { r = 0; g = 255; b = col_val; }   // 水～緑
-            else if (value >= (0.0 / 4.0)) { r = 0; g = col_val; b = 255; }   // 青～水
-            else { r = 0; g = 0; b = 255; }   // 青
-            ret = (a & 0x000000FF) << 24
-                | (r & 0x000000FF) << 16
-                | (g & 0x000000FF) << 8
-                | (b & 0x000000FF);
-            return ((byte)a, (byte)r, (byte)g, (byte)b);
-        }
-
-        /// <summary>
-        /// 虹色を0.0～1.0で表現したいので、
-        /// 指定した上限と下限の温度値の範囲で、0.0～1.0の値をとるよう変換
-        /// </summary>
-        /// <param name="temperature"></param>
-        /// <returns></returns>
-        private double TemperatureTo0to1Double(double temperature)
-        {
-            // 15.0℃～35℃で、虹色を作るものとする。(あとではんい広げたい)
-            double ret = 0;// 温度の値を、15度～35度の間で0.0～1.0に直したもの
-            double lowlimit = LowerLimit;
-            double highlimit = UpperLimit;
-            double dif = highlimit - lowlimit;
-
-            if (temperature < lowlimit)
-            {
-                ret = 0;
-            }
-            else if (temperature > highlimit)
-            {
-                ret = 1;
-            }
-            else
-            {
-                ret = (temperature - lowlimit) / (highlimit - lowlimit);
-            }
-
-            return ret;
-        }
-
-        /// <summary>
-        /// 温度の値を、32*24のピクセルの描画データに変換する
-        /// </summary>
-        /// <param name="totalFrameData"></param>
-        /// <returns></returns>
-        private async Task<BitmapImage> DoubleToRaindowColor(double[] totalFrameData)//temp:温度の値
-        {
-            int width = 32;
-            int height = 24;
-            byte[] data = new byte[width * height * 4];
-
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    // 指定の温度下限～上限の値を、0.0～1.0の値に変換する
-                    var v = TemperatureTo0to1Double(totalFrameData[i + j * width]);
-
-                    // 0.0～1.0の値を、虹色を表すバイト列に変換する
-                    var c = ColorScaleBCGYR(v);
-
-                    data[4 * (i + j * width)] = c.Item4;            // Blue
-                    data[4 * (i + j * width) + 1] = c.Item3;        // Green
-                    data[4 * (i + j * width) + 2] = c.Item2;        // Red
-                    data[4 * (i + j * width) + 3] = c.Item1;        // alpha
-                }
-            }
-
-            // サーマル画像を作成
-            WriteableBitmap bitmap = new WriteableBitmap(width, height);
-            InMemoryRandomAccessStream inMRAS = new InMemoryRandomAccessStream();
-            BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.BmpEncoderId, inMRAS);
-            encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, (uint)bitmap.PixelWidth, (uint)bitmap.PixelHeight, 96.0, 96.0, data);
-            await encoder.FlushAsync();
-            BitmapImage bitmapImage = new BitmapImage();
-            bitmapImage.SetSource(inMRAS);
-
-            return bitmapImage;
-        }
         #endregion
     }
 

@@ -32,18 +32,18 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
             <!-- 温度表示部 -->
             <Grid Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="0"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="デバッグボタン" Click="Button_Click" FontSize="35" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBlock Name="tbTemparature" Text="-.- ℃" FontSize="99" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                <Button Content="デバッグボタン" Click="Button_Click" FontSize="25" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Name="tbTemparature" Text="-.- ℃" FontSize="25" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
             </Grid>
 
             <!-- スライダ部(上限値) -->
@@ -53,16 +53,14 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="125"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0"  Text="上限値：" FontSize="45" Foreground="Black"/>
-                <TextBlock Grid.Row="0" Grid.Column="1"  Text="{Binding Value, ElementName=slUpperLimit, Mode=TwoWay}" FontSize="55" Foreground="Black"/>
-                <Viewbox Grid.Row="0" Grid.Column="2" >
-                    <Slider  Name="slUpperLimit" Value="{Binding UpperLimit, Mode=TwoWay}" Maximum="50" Width="150"/>
-                </Viewbox>
+                <TextBlock Grid.Row="0" Grid.Column="0"  Text="上限値：" FontSize="25" Foreground="Black"/>
+                <TextBlock Grid.Row="0" Grid.Column="1"  Text="{Binding Value, ElementName=slUpperLimit, Mode=TwoWay}" FontSize="30" Foreground="Black"/>
+                    <Slider Grid.Row="0" Grid.Column="2" Name="slUpperLimit" Value="{Binding UpperLimit, Mode=TwoWay}" Maximum="50"/>
             </Grid>
 
             <!-- スライダ部(下限値) -->
@@ -72,16 +70,14 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="125"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0"  Text="下限値：" FontSize="45" Foreground="Black"/>
-                <TextBlock Grid.Row="0" Grid.Column="1"  Text="{Binding Value, ElementName=slLowerLimit, Mode=TwoWay}" FontSize="55" Foreground="Black"/>
-                <Viewbox Grid.Row="0" Grid.Column="2" >
-                    <Slider  Name="slLowerLimit" Value="{Binding LowerLimit, Mode=TwoWay}" Maximum="50" Width="150"/>
-                </Viewbox>
+                <TextBlock Grid.Row="0" Grid.Column="0"  Text="下限値：" FontSize="25" Foreground="Black"/>
+                <TextBlock Grid.Row="0" Grid.Column="1"  Text="{Binding Value, ElementName=slLowerLimit, Mode=TwoWay}" FontSize="30" Foreground="Black"/>
+                <Slider Grid.Row="0" Grid.Column="2" Name="slLowerLimit" Value="{Binding LowerLimit, Mode=TwoWay}" Maximum="50"/>
             </Grid>
         </Grid>
     </Grid>
